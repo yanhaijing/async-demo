@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>generator</title>
+    <style>
+        .box {
+            width: 60px;
+            height: 60px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <script src="js/move.js"></script>
+    
+    <script>
+        function run(fn) {
+            let gen = fn()
+
+            function next(data) {
+                var res = gen.next(data)
+                if (res.done) return res.value;
+
+                res.value.then(function (data) {
+                    next(data)
+                })
+            }
+
+            next()
+        }
+
+        function moveTo(x = 0, y = 0) {
+            return new Promise(function (resolve, reject) {
+                move('.box').x(x).y(y).end(resolve);
+            })
+        }
+
+        function* gen() {
+            yield moveTo(100, 0)
+            yield moveTo(200, 0)
+            yield moveTo(300, 0)
+            yield moveTo(400, 0)
+            yield moveTo(500, 0)
+            yield moveTo(600, 0)
+            yield moveTo(700, 0)
+            yield moveTo(800, 0)
+            yield moveTo(900, 0)
+            yield moveTo(1000, 0)
+        }
+
+        run(gen)
+    </script>
+</body>
+</html>

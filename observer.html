@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pub/sub</title>
+    <style>
+        .box {
+            width: 60px;
+            height: 60px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <script src="js/move.js"></script>
+    
+    <script>
+        let eventMap = {};
+        function pub(msg, ...rest) {
+            eventMap[msg] && eventMap[msg].forEach((cb) => {
+                cb(...rest);
+            });
+        }
+
+        function sub(msg, cb) {
+            eventMap[msg] = eventMap[msg] || [];
+            eventMap[msg].push(cb);
+        }
+    </script>
+    <script>
+        function moveTo(x = 0, y = 0, cb = function () {}) {
+            move('.box').x(x).y(y).end(cb);
+        }
+
+        sub('1', function () {
+            moveTo(100, 0, function () {
+                pub('2')
+            })
+        })
+
+        sub('2', function () {
+            moveTo(200, 0, function () {
+                pub('3')
+            })
+        })
+
+        sub('3', function () {
+            moveTo(300, 0, function () {
+                pub('4')
+            })
+        })
+
+        sub('4', function () {
+            moveTo(400, 0, function () {
+                pub('5')
+            })
+        })
+
+        sub('5', function () {
+            moveTo(500, 0, function () {
+                pub('6')
+            })
+        })
+
+        sub('6', function () {
+            moveTo(600, 0, function () {
+                pub('7')
+            })
+        })
+
+        sub('7', function () {
+            moveTo(700, 0, function () {
+                pub('8')
+            })
+        })
+
+        sub('8', function () {
+            moveTo(800, 0, function () {
+                pub('9')
+            })
+        })
+
+        sub('9', function () {
+            moveTo(900, 0, function () {
+                pub('10')
+            })
+        })
+
+        sub('10', function () {
+            moveTo(1000, 0, function () {
+            })
+        })
+
+        pub('1')
+    </script>
+</body>
+</html>
